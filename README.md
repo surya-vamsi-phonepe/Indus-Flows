@@ -1197,7 +1197,7 @@ jobs:
 | `file_type` | Type of file to upload (`aab`, `apk`, or `apks`) | ✅ | `apk` |
 | `package_name` | Android package name (e.g. com.example.app) | ⚠️** | - |
 | `api_token` | Indus Appstore API Token | ✅ | - |
-| `release_notes` | Release notes for this version | ❌ | `New release via GitHub Actions` |
+| `release_notes` | Release notes for this version | ❌ | ``|
 | `keystore_path` | Path to keystore file (for AAB signing) | ❌ | - |
 | `keystore_password` | Password for keystore | ❌ | - |
 | `key_alias` | Key alias in keystore | ❌ | - |
