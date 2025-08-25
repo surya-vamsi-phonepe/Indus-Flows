@@ -1,0 +1,118 @@
+---
+name: 💡 Feature Request
+about: Suggest a new feature or enhancement for the action
+title: '[FEATURE] '
+labels: ['enhancement']
+assignees: ''
+---
+
+## 💡 Feature Description
+
+**Brief summary**: A clear and concise description of the feature you'd like to see.
+
+## 🎯 Problem Statement
+
+**What problem does this solve?**
+Describe the problem or limitation you're experiencing that this feature would address.
+
+## 🚀 Proposed Solution
+
+**How should it work?**
+Describe your proposed solution in detail. Include:
+- New parameters or configuration options
+- Expected behavior
+- Example usage
+
+### Example Configuration
+
+```yaml
+# Show how the feature would be used
+- name: Deploy with new feature
+  uses: indusappstore/appstore-release@v1
+  with:
+    # existing parameters
+    file_path: './app-release.aab'
+    file_type: 'aab'
+    
+    # new feature parameters
+    new_parameter: 'example_value'
+    enhanced_option: 'true'
+```
+
+## 🔄 Alternatives Considered
+
+**What alternatives have you considered?**
+- Current workarounds you're using
+- Other approaches you've considered
+- Why those alternatives don't work well
+
+## 📊 Use Cases
+
+**Who would benefit from this feature?**
+- [ ] Individual developers
+- [ ] Small teams
+- [ ] Enterprise users
+- [ ] CI/CD automation
+- [ ] Security-focused workflows
+
+**Specific scenarios:**
+1. Scenario 1: [describe when this would be useful]
+2. Scenario 2: [another use case]
+3. Scenario 3: [additional use case]
+
+## 🔧 Implementation Considerations
+
+**Technical aspects to consider:**
+- [ ] Backward compatibility required
+- [ ] Security implications
+- [ ] Performance impact
+- [ ] Additional dependencies
+- [ ] Documentation updates needed
+
+**Complexity level:**
+- [ ] Simple configuration change
+- [ ] Minor script modification
+- [ ] Moderate feature addition
+- [ ] Major functionality enhancement
+
+## 📋 Acceptance Criteria
+
+**This feature would be complete when:**
+- [ ] Configuration option is available
+- [ ] Feature works as described
+- [ ] Documentation is updated
+- [ ] Examples are provided
+- [ ] Tests are included
+- [ ] Backward compatibility is maintained
+
+## 🔗 Related Issues
+
+- Links to related issues or discussions
+- References to similar features in other actions
+
+## 📱 Platform Impact
+
+**Which platforms/scenarios does this affect?**
+- [ ] APK deployments
+- [ ] AAB deployments
+- [ ] APKS deployments
+- [ ] Keystore management
+- [ ] Auto-detection features
+- [ ] Security features
+- [ ] Error handling
+- [ ] Logging and debugging
+
+## 🎨 Additional Context
+
+- Screenshots, mockups, or diagrams if helpful
+- Links to relevant documentation
+- Examples from other GitHub Actions
+- Any research you've done on this feature
+
+## ✅ Checklist
+
+- [ ] I have searched existing issues for similar feature requests
+- [ ] I have clearly described the problem this solves
+- [ ] I have provided specific use cases
+- [ ] I have considered the implementation complexity
+- [ ] I am willing to contribute to the implementation (optional)

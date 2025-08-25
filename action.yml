@@ -1,0 +1,158 @@
+# Copyright 2025 PhonePe Limited
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
+name: 'Indus Appstore Release'
+description: 'Deploy Android apps (APK, AAB, APKS) to Indus Appstore'
+author: 'PhonePe Limited.'
+branding:
+  icon: 'package'
+  color: 'blue'
+
+inputs:
+  operation_mode:
+    description: 'Operation mode (currently only deploy_only is supported)'
+    required: false
+    default: 'deploy_only'
+  file_path:
+    description: 'Path to the AAB, APK, or APKs file to upload'
+    required: true
+  file_type:
+    description: 'Type of file to upload (aab, apk, or apks)'
+    required: true
+    default: 'apk'
+  package_name:
+    description: 'Android package name (e.g. com.example.app)'
+    required: false
+  api_token:
+    description: 'Indus Appstore Developer API Token'
+    required: true
+  release_notes:
+    description: 'Release notes for this deployment'
+    required: false
+    default: 'Deployed via GitHub Actions'
+  keystore_source:
+    description: 'Source of keystore (file, base64, cdn, script, encrypted_file, or none)'
+    required: false
+    default: 'none'
+  keystore_path:
+    description: 'Path to the keystore file (for keystore_source=file)'
+    required: false
+  keystore_base64:
+    description: 'Base64 encoded keystore content (for keystore_source=base64)'
+    required: false
+  keystore_cdn_url:
+    description: 'CDN URL to download keystore (for keystore_source=cdn)'
+    required: false
+  keystore_cdn_auth_header:
+    description: 'Authorization header for CDN download (optional)'
+    required: false
+  keystore_script_path:
+    description: 'Path to custom script that generates/fetches keystore (for keystore_source=script)'
+    required: false
+  keystore_script_args:
+    description: 'Arguments to pass to custom keystore script (space-separated)'
+    required: false
+  keystore_encrypted_path:
+    description: 'Path to encrypted keystore file (for keystore_source=encrypted_file)'
+    required: false
+  keystore_encryption_key:
+    description: 'Key for decrypting encrypted keystore file'
+    required: false
+  keystore_password:
+    description: 'Password for the keystore'
+    required: false
+  key_alias:
+    description: 'Key alias in the keystore'
+    required: false
+  key_password:
+    description: 'Password for the key'
+    required: false
+  # Auto-detect package name if not provided
+  auto_detect_package:
+    description: 'Automatically detect package name from build.gradle if not provided'
+    required: false
+    default: 'false'
+  keystore_validation:
+    description: 'Validate keystore before use'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set script permissions
+      shell: bash
+      run: |
+        chmod +x ${{ github.action_path }}/scripts/**/*.sh
+        echo "Script permissions set successfully"
+        
+    - name: Validate inputs
+      shell: bash
+      run: ${{ github.action_path }}/scripts/core/validate-inputs.sh
+      env:
+        INPUT_OPERATION_MODE: ${{ inputs.operation_mode }}
+        INPUT_FILE_PATH: ${{ inputs.file_path }}
+        INPUT_FILE_TYPE: ${{ inputs.file_type }}
+        INPUT_KEYSTORE_SOURCE: ${{ inputs.keystore_source }}
+        INPUT_KEYSTORE_PATH: ${{ inputs.keystore_path }}
+        INPUT_KEYSTORE_BASE64: ${{ inputs.keystore_base64 }}
+        INPUT_KEYSTORE_CDN_URL: ${{ inputs.keystore_cdn_url }}
+        INPUT_KEYSTORE_SCRIPT_PATH: ${{ inputs.keystore_script_path }}
+        INPUT_KEYSTORE_ENCRYPTED_PATH: ${{ inputs.keystore_encrypted_path }}
+        INPUT_KEYSTORE_PASSWORD: ${{ inputs.keystore_password }}
+        INPUT_KEY_ALIAS: ${{ inputs.key_alias }}
+        INPUT_KEY_PASSWORD: ${{ inputs.key_password }}
+    
+    - name: Detect package name
+      id: package-detection
+      shell: bash
+      run: ${{ github.action_path }}/scripts/core/detect-package-name.sh
+      env:
+        INPUT_PACKAGE_NAME: ${{ inputs.package_name }}
+        INPUT_AUTO_DETECT_PACKAGE: ${{ inputs.auto_detect_package }}
+    
+    - name: Setup keystore
+      if: inputs.file_type == 'aab'
+      shell: bash
+      run: ${{ github.action_path }}/scripts/keystore/setup-keystore.sh
+      env:
+        INPUT_KEYSTORE_SOURCE: ${{ inputs.keystore_source }}
+        INPUT_KEYSTORE_PATH: ${{ inputs.keystore_path }}
+        INPUT_KEYSTORE_BASE64: ${{ inputs.keystore_base64 }}
+        INPUT_KEYSTORE_CDN_URL: ${{ inputs.keystore_cdn_url }}
+        INPUT_KEYSTORE_CDN_AUTH_HEADER: ${{ inputs.keystore_cdn_auth_header }}
+        INPUT_KEYSTORE_SCRIPT_PATH: ${{ inputs.keystore_script_path }}
+        INPUT_KEYSTORE_SCRIPT_ARGS: ${{ inputs.keystore_script_args }}
+        INPUT_KEYSTORE_ENCRYPTED_PATH: ${{ inputs.keystore_encrypted_path }}
+        INPUT_KEYSTORE_ENCRYPTION_KEY: ${{ inputs.keystore_encryption_key }}
+        INPUT_KEYSTORE_PASSWORD: ${{ inputs.keystore_password }}
+        INPUT_KEY_ALIAS: ${{ inputs.key_alias }}
+        INPUT_KEY_PASSWORD: ${{ inputs.key_password }}
+        INPUT_KEYSTORE_VALIDATION: ${{ inputs.keystore_validation }}
+
+    - name: Prepare for upload
+      id: prepare-upload
+      shell: bash
+      run: ${{ github.action_path }}/scripts/core/prepare-upload.sh
+      env:
+        INPUT_FILE_PATH: ${{ inputs.file_path }}
+        INPUT_FILE_TYPE: ${{ inputs.file_type }}
+
+    - name: Upload to Indus Appstore
+      shell: bash
+      run: ${{ github.action_path }}/scripts/core/upload-to-store.sh
+      env:
+        INPUT_API_TOKEN: ${{ inputs.api_token }}
+        INPUT_RELEASE_NOTES: ${{ inputs.release_notes }}
+        INPUT_FILE_TYPE: ${{ inputs.file_type }}
+        INPUT_KEYSTORE_SOURCE: ${{ inputs.keystore_source }}
+        INPUT_KEYSTORE_PASSWORD: ${{ inputs.keystore_password }}
+        INPUT_KEY_ALIAS: ${{ inputs.key_alias }}
+        INPUT_KEY_PASSWORD: ${{ inputs.key_password }}
+    
+    - name: Cleanup keystore
+      if: always()
+      shell: bash
+      run: ${{ github.action_path }}/scripts/keystore/cleanup-keystore.sh
