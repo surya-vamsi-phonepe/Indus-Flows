@@ -87,7 +87,15 @@ runs:
       run: |
         chmod +x ${{ github.action_path }}/scripts/**/*.sh
         echo "Script permissions set successfully"
-        
+    
+    - name: Detect package name
+      id: package-detection
+      shell: bash
+      run: ${{ github.action_path }}/scripts/core/detect-package-name.sh
+      env:
+        INPUT_PACKAGE_NAME: ${{ inputs.package_name }}
+        INPUT_AUTO_DETECT_PACKAGE: ${{ inputs.auto_detect_package }}
+
     - name: Validate inputs
       shell: bash
       run: ${{ github.action_path }}/scripts/core/validate-inputs.sh
@@ -104,14 +112,6 @@ runs:
         INPUT_KEYSTORE_PASSWORD: ${{ inputs.keystore_password }}
         INPUT_KEY_ALIAS: ${{ inputs.key_alias }}
         INPUT_KEY_PASSWORD: ${{ inputs.key_password }}
-    
-    - name: Detect package name
-      id: package-detection
-      shell: bash
-      run: ${{ github.action_path }}/scripts/core/detect-package-name.sh
-      env:
-        INPUT_PACKAGE_NAME: ${{ inputs.package_name }}
-        INPUT_AUTO_DETECT_PACKAGE: ${{ inputs.auto_detect_package }}
     
     - name: Setup keystore
       if: inputs.file_type == 'aab'

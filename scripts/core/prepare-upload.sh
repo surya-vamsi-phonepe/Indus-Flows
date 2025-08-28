@@ -22,13 +22,18 @@ if [[ ! -f "${UPLOAD_FILE_PATH}" ]]; then
 fi
 
 BASE_URL="https://developer-api.indusappstore.com/devtools"
-if [[ "$INPUT_FILE_TYPE" == "aab" ]]; then
-  echo "API_URL=${BASE_URL}/aab/upgrade/$PACKAGE_NAME" >> $GITHUB_ENV
-elif [[ "$INPUT_FILE_TYPE" == "apk" ]]; then
-  echo "API_URL=${BASE_URL}/apk/upgrade/$PACKAGE_NAME" >> $GITHUB_ENV
-elif [[ "$INPUT_FILE_TYPE" == "apks" ]]; then
-  echo "API_URL=${BASE_URL}/apks/upgrade/$PACKAGE_NAME" >> $GITHUB_ENV
-fi
+case "$INPUT_FILE_TYPE" in
+  "aab")
+    echo "API_URL=${BASE_URL}/aab/upgrade/$PACKAGE_NAME" >> $GITHUB_ENV
+    ;;
+  "apks")
+    echo "API_URL=${BASE_URL}/apks/upgrade/$PACKAGE_NAME" >> $GITHUB_ENV
+    ;;
+  *)
+    # Default case (same as apk)
+    echo "API_URL=${BASE_URL}/apk/upgrade/$PACKAGE_NAME" >> $GITHUB_ENV
+    ;;
+esac
 
 echo "✅ Upload preparation complete. File path: ${UPLOAD_FILE_PATH}"
 echo "✅ API URL set to: $(cat $GITHUB_ENV | grep API_URL | cut -d= -f2)"
