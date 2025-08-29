@@ -38,8 +38,8 @@ log_error() {
 }
 
 log_debug() {
-    if [[ "${ACTIONS_STEP_DEBUG:-false}" == "true" ]]; then
-        echo -e "${PURPLE}🐛 DEBUG: $1${NC}"
+    if [[ "${ACTIONS_STEP_DEBUG:-false}" == "true" || "${INPUT_VERBOSE:-false}" == "true" ]]; then
+        echo -e "${PURPLE} DEBUG: $1${NC}"
     fi
 }
 

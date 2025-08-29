@@ -78,6 +78,10 @@ inputs:
     description: 'Validate keystore before use'
     required: false
     default: 'true'
+  verbose:
+    description: 'Enable verbose logging'
+    required: false
+    default: 'false'
 
 runs:
   using: 'composite'
@@ -95,6 +99,7 @@ runs:
       env:
         INPUT_PACKAGE_NAME: ${{ inputs.package_name }}
         INPUT_AUTO_DETECT_PACKAGE: ${{ inputs.auto_detect_package }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
 
     - name: Validate inputs
       shell: bash
@@ -112,6 +117,7 @@ runs:
         INPUT_KEYSTORE_PASSWORD: ${{ inputs.keystore_password }}
         INPUT_KEY_ALIAS: ${{ inputs.key_alias }}
         INPUT_KEY_PASSWORD: ${{ inputs.key_password }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
     
     - name: Setup keystore
       if: inputs.file_type == 'aab'
@@ -131,6 +137,7 @@ runs:
         INPUT_KEY_ALIAS: ${{ inputs.key_alias }}
         INPUT_KEY_PASSWORD: ${{ inputs.key_password }}
         INPUT_KEYSTORE_VALIDATION: ${{ inputs.keystore_validation }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
 
     - name: Prepare for upload
       id: prepare-upload
@@ -139,6 +146,7 @@ runs:
       env:
         INPUT_FILE_PATH: ${{ inputs.file_path }}
         INPUT_FILE_TYPE: ${{ inputs.file_type }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
 
     - name: Upload to Indus Appstore
       shell: bash
@@ -151,6 +159,7 @@ runs:
         INPUT_KEYSTORE_PASSWORD: ${{ inputs.keystore_password }}
         INPUT_KEY_ALIAS: ${{ inputs.key_alias }}
         INPUT_KEY_PASSWORD: ${{ inputs.key_password }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
     
     - name: Cleanup keystore
       if: always()

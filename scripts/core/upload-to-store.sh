@@ -27,8 +27,10 @@ HTTP_STATUS=${RESPONSE: -3}
 
 RESPONSE=$(tail -n1 response.txt)
 
-echo "Response from server:"
-echo $RESPONSE
+log_debug "Response from server:"
+if [[ "$INPUT_VERBOSE" == "true" ]]; then
+  echo "$RESPONSE"
+fi
 if [[ $HTTP_STATUS -ge 200 && $HTTP_STATUS -lt 300 ]]; then
   echo "✅ Successfully uploaded $INPUT_FILE_TYPE to Indus Appstore!"
 else

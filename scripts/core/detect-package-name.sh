@@ -5,11 +5,12 @@
 # LICENSE file in the root directory of this source tree.
 
 set -e
-
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../utils/common.sh"
 PACKAGE_NAME="$INPUT_PACKAGE_NAME"
 
 if [[ -z "$PACKAGE_NAME" && "$INPUT_AUTO_DETECT_PACKAGE" == "true" ]]; then
-  echo "Attempting to auto-detect package name from build.gradle..."
+  log_debug "Attempting to auto-detect package name from build.gradle..."
   
   if [[ -f "app/build.gradle" ]]; then
     DETECTED_PACKAGE=$(grep -o "applicationId ['\"].*['\"]" app/build.gradle | sed -E "s/applicationId ['\"]([^'\"]*)['\"].*/\1/")
@@ -18,7 +19,7 @@ if [[ -z "$PACKAGE_NAME" && "$INPUT_AUTO_DETECT_PACKAGE" == "true" ]]; then
   fi
   
   if [[ -n "$DETECTED_PACKAGE" ]]; then
-    echo "Detected package name: $DETECTED_PACKAGE"
+    log_debug "Detected package name: $DETECTED_PACKAGE"
     PACKAGE_NAME="$DETECTED_PACKAGE"
   else
     echo "Error: Could not auto-detect package name and none was provided"

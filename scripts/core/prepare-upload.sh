@@ -35,5 +35,5 @@ case "$INPUT_FILE_TYPE" in
     ;;
 esac
 
-echo "✅ Upload preparation complete. File path: ${UPLOAD_FILE_PATH}"
-echo "✅ API URL set to: $(cat $GITHUB_ENV | grep API_URL | cut -d= -f2)"
+log_debug "✅ Upload preparation complete. File path: ${UPLOAD_FILE_PATH}"
+log_debug "✅ API URL set to: $(cat $GITHUB_ENV | grep API_URL | cut -d= -f2)"
