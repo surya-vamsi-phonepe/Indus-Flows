@@ -1,0 +1,29 @@
+# Basic APK deployment example
+# Simple deployment when you already have a built APK file
+name: Deploy APK to Indus Appstore
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy APK to Indus Appstore
+        uses: indusappstore/appstore-release@v1
+        with:
+          operation_mode: 'deploy_only'
+          file_path: './app-release.apk'
+          file_type: 'apk'
+          api_token: ${{ secrets.INDUS_APP_STORE_API_TOKEN }}
+          
+          # Auto-detect package name from APK (recommended)
+          auto_detect_package: 'true'
+          
+          # Optional: Manual package name override
+          # package_name: 'com.example.myapp'
