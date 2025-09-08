@@ -18,12 +18,12 @@ if [[ -z "$PACKAGE_NAME" && "$INPUT_AUTO_DETECT_PACKAGE" == "true" ]]; then
     DETECTED_PACKAGE=$(grep -o 'applicationId = ".*"' app/build.gradle.kts | sed -E 's/applicationId = "(.*)"/\1/')
   fi
 
-  REPO_ROOT="${GITHUB_WORKSPACE:-$(pwd)}"
-if [[ -f "$REPO_ROOT/app/build.gradle" ]]; then
-  DETECTED_PACKAGE=$(grep -o "applicationId ['\"].*['\"]" "$REPO_ROOT/app/build.gradle" | sed -E "s/applicationId ['\"]([^'\"]*)['\"].*/\1/")
-elif [[ -f "$REPO_ROOT/app/build.gradle.kts" ]]; then
-  DETECTED_PACKAGE=$(grep -o 'applicationId = ".*"' "$REPO_ROOT/app/build.gradle.kts" | sed -E 's/applicationId = "(.*)"/\1/')
-fi
+#   REPO_ROOT="${GITHUB_WORKSPACE:-$(pwd)}"
+# if [[ -f "$REPO_ROOT/app/build.gradle" ]]; then
+#   DETECTED_PACKAGE=$(grep -o "applicationId ['\"].*['\"]" "$REPO_ROOT/app/build.gradle" | sed -E "s/applicationId ['\"]([^'\"]*)['\"].*/\1/")
+# elif [[ -f "$REPO_ROOT/app/build.gradle.kts" ]]; then
+#   DETECTED_PACKAGE=$(grep -o 'applicationId = ".*"' "$REPO_ROOT/app/build.gradle.kts" | sed -E 's/applicationId = "(.*)"/\1/')
+# fi
 
   echo "GREP OUTPUT: $DETECTED_PACKAGE"
   
