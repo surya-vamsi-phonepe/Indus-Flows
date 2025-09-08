@@ -33,6 +33,9 @@ validate_keystore() {
     
     # Use a temporary file for keytool output to avoid logging sensitive info
     local temp_output="$TEMP_DIR/keytool_output.tmp"
+
+    echo "Keystore path: $keystore_path"
+    echo "Keystore path: $TEMP_DIR"
     
     if keytool -list -keystore "$keystore_path" \
                -storepass "$password" \
