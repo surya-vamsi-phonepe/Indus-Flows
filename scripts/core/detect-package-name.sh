@@ -14,6 +14,8 @@ if [[ -z "$PACKAGE_NAME" && "$INPUT_AUTO_DETECT_PACKAGE" == "true" ]]; then
 
   cat app/build.gradle
 
+  ls
+
   if [[ -f "app/build.gradle" ]]; then
     DETECTED_PACKAGE=$(grep -o "applicationId ['\"].*['\"]" app/build.gradle | sed -E "s/applicationId ['\"]([^'\"]*)['\"].*/\1/")
   elif [[ -f "app/build.gradle.kts" ]]; then
