@@ -11,12 +11,16 @@ PACKAGE_NAME="$INPUT_PACKAGE_NAME"
 
 if [[ -z "$PACKAGE_NAME" && "$INPUT_AUTO_DETECT_PACKAGE" == "true" ]]; then
   log_debug "Attempting to auto-detect package name from build.gradle..."
-  
+
+  cat app/build.gradle
+
   if [[ -f "app/build.gradle" ]]; then
     DETECTED_PACKAGE=$(grep -o "applicationId ['\"].*['\"]" app/build.gradle | sed -E "s/applicationId ['\"]([^'\"]*)['\"].*/\1/")
   elif [[ -f "app/build.gradle.kts" ]]; then
     DETECTED_PACKAGE=$(grep -o 'applicationId = ".*"' app/build.gradle.kts | sed -E 's/applicationId = "(.*)"/\1/')
   fi
+
+  echo "GREP OUTPUT: $DETECTED_PACKAGE"
   
   if [[ -n "$DETECTED_PACKAGE" ]]; then
     log_debug "Detected package name: $DETECTED_PACKAGE"
